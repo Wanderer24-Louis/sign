@@ -3,170 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>出勤統計系統</title>
+  <title>出勤點名統計</title>
   <style>
-    body {
-      font-family: "Microsoft JhengHei", sans-serif;
-      padding: 20px;
-      background: #f8f8f8;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      background: white;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 6px;
-      text-align: center;
-    }
-    th {
-      background-color: #eee;
-    }
-    input[type="date"], input[type="text"], input[type="number"] {
-      padding: 4px;
-      width: 150px;
-    }
-    .small-input {
-      width: 100px;
-    }
-    button {
-      margin-top: 15px;
-      padding: 8px 16px;
-      cursor: pointer;
-      border: none;
-      border-radius: 6px;
-      background: #4CAF50;
-      color: white;
-      font-size: 14px;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    #result {
-      margin-top: 20px;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 10px;
-      white-space: pre-line;
-    }
+    body { font-family: "Microsoft JhengHei", sans-serif; padding: 20px; background: #f6f6f6; }
+    table { border-collapse: collapse; width: 100%; background: white; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #eee; }
+    input[type="time"], input[type="text"] { width: 100px; padding: 2px; }
+    button { margin-top: 15px; padding: 8px 16px; cursor: pointer; }
+    #result { margin-top: 20px; background: #fff; border: 1px solid #ccc; padding: 10px; white-space: pre-line; }
+    .flex { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <h2>專案作業出勤統計</h2>
+  <h2>出勤點名系統</h2>
 
-  <label>日期：</label>
-  <input type="date" id="datePicker"><br><br>
+  <div class="flex">
+    <label>日期：</label>
+    <input type="date" id="datePicker">
+  </div>
 
-  <label>應到人數：</label>
-  <input type="number" id="shouldAttend" value="10" min="0"><br><br>
+  <div class="flex">
+    <input type="text" id="nameInput" placeholder="輸入名單，用逗號分隔 (例：A,B,C,D)" style="width:300px;">
+    <button onclick="setNames()">建立名單</button>
+  </div>
 
-  <table>
-    <tr>
-      <th>姓名</th>
-      <th>在營</th>
-      <th>休假</th>
-      <th>受訓</th>
-      <th>公勤</th>
-      <th>地點</th>
-      <th>起</th>
-      <th>迄</th>
-    </tr>
-
-    <!-- 名單範例，可自行增加 -->
-    <tr><td>A</td><td><input type="checkbox" name="A" value="在營"></td><td><input type="checkbox" name="A" value="休假"></td><td><input type="checkbox" name="A" value="受訓"></td><td><input type="checkbox" name="A" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
-    <tr><td>B</td><td><input type="checkbox" name="B" value="在營"></td><td><input type="checkbox" name="B" value="休假"></td><td><input type="checkbox" name="B" value="受訓"></td><td><input type="checkbox" name="B" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
-    <tr><td>C</td><td><input type="checkbox" name="C" value="在營"></td><td><input type="checkbox" name="C" value="休假"></td><td><input type="checkbox" name="C" value="受訓"></td><td><input type="checkbox" name="C" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
-    <tr><td>D</td><td><input type="checkbox" name="D" value="在營"></td><td><input type="checkbox" name="D" value="休假"></td><td><input type="checkbox" name="D" value="受訓"></td><td><input type="checkbox" name="D" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
-    <tr><td>E</td><td><input type="checkbox" name="E" value="在營"></td><td><input type="checkbox" name="E" value="休假"></td><td><input type="checkbox" name="E" value="受訓"></td><td><input type="checkbox" name="E" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
-    <tr><td>F</td><td><input type="checkbox" name="F" value="在營"></td><td><input type="checkbox" name="F" value="休假"></td><td><input type="checkbox" name="F" value="受訓"></td><td><input type="checkbox" name="F" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
-    <tr><td>G</td><td><input type="checkbox" name="G" value="在營"></td><td><input type="checkbox" name="G" value="休假"></td><td><input type="checkbox" name="G" value="受訓"></td><td><input type="checkbox" name="G" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
+  <table id="attendanceTable">
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th>出勤狀態</th>
+        <th>地點／期間（若有）</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
   </table>
 
-  <button onclick="generateReport()">彙整結果</button>
+  <button onclick="generateResult()">彙整結果</button>
   <button onclick="copyResult()">📋 一鍵複製</button>
 
   <div id="result"></div>
 
   <script>
-    // 自動帶入今天日期
-    document.addEventListener("DOMContentLoaded", () => {
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      document.getElementById("datePicker").value = `${yyyy}-${mm}-${dd}`;
-    });
+    // 初始化
+    window.onload = function() {
+      const savedNames = localStorage.getItem("names");
+      if (savedNames) {
+        document.getElementById("nameInput").value = savedNames;
+        buildTable(savedNames.split(","));
+      }
+      // 預設日期為今天
+      document.getElementById("datePicker").valueAsDate = new Date();
+    };
 
-    function formatDateForDisplay(dateStr) {
+    // 儲存名單並生成表格
+    function setNames() {
+      const nameStr = document.getElementById("nameInput").value.trim();
+      if (!nameStr) return alert("請輸入名單");
+      localStorage.setItem("names", nameStr);
+      buildTable(nameStr.split(","));
+    }
+
+    // 建立表格
+    function buildTable(names) {
+      const tbody = document.querySelector("#attendanceTable tbody");
+      tbody.innerHTML = "";
+      names.forEach(name => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${name.trim()}</td>
+          <td>
+            <select>
+              <option value="在營">在營</option>
+              <option value="休假">休假</option>
+              <option value="公勤">公勤</option>
+              <option value="受訓">受訓</option>
+            </select>
+          </td>
+          <td><input type="text" placeholder="地點或時間區間"></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 彙整結果
+    function generateResult() {
+      const date = document.getElementById("datePicker").value;
+      const rows = document.querySelectorAll("#attendanceTable tbody tr");
+      let zaiying = [], xiujia = [], gongqin = [], shouxun = [];
+
+      rows.forEach(r => {
+        const name = r.children[0].textContent.trim();
+        const status = r.children[1].querySelector("select").value;
+        const note = r.children[2].querySelector("input").value.trim();
+
+        if (status === "在營") zaiying.push(name);
+        else if (status === "休假") xiujia.push(name);
+        else if (status === "公勤") gongqin.push(name + (note ? `(${note})` : ""));
+        else if (status === "受訓") shouxun.push(name + (note ? `(${note})` : ""));
+      });
+
+      const total = zaiying.length + xiujia.length + gongqin.length + shouxun.length;
+      const result = 
+`專案作業${formatDate(date)}出勤統計：
+應到${total}、事故${xiujia.length + gongqin.length + shouxun.length}、實到${zaiying.length}
+在營(${zaiying.length})：${zaiying.join("、") || "無"}
+
+事故(${xiujia.length + gongqin.length + shouxun.length})：
+${xiujia.length ? "1.休假：" + xiujia.join("、") + "\n" : ""}
+${shouxun.length ? "2.受訓：" + shouxun.join("、") + "\n" : ""}
+${gongqin.length ? "3.公勤：" + gongqin.join("、") : ""}`;
+
+      document.getElementById("result").textContent = result;
+    }
+
+    // 一鍵複製
+    function copyResult() {
+      const text = document.getElementById("result").textContent;
+      if (!text) return alert("請先產生結果！");
+      navigator.clipboard.writeText(text);
+      alert("已複製到剪貼簿！");
+    }
+
+    // 日期格式
+    function formatDate(dateStr) {
       if (!dateStr) return "";
       const date = new Date(dateStr);
-      if (isNaN(date)) return dateStr;
-      return `${date.getMonth() + 1}月${date.getDate()}日`;
-    }
-
-    function generateReport() {
-      const dateStr = document.getElementById("datePicker").value;
-      const dateText = formatDateForDisplay(dateStr) || "（未填日期）";
-      const shouldAttend = parseInt(document.getElementById("shouldAttend").value) || 0;
-
-      const rows = document.querySelectorAll("table tr");
-      let presentList = [];
-      let leaveList = { "休假": [], "受訓": [], "公勤": [] };
-
-      rows.forEach((row, i) => {
-        if (i === 0) return;
-        const name = row.cells[0].textContent.trim();
-        const checks = row.querySelectorAll('input[type="checkbox"]:checked');
-        const place = row.querySelector('.place').value.trim();
-        const from = row.querySelector('.from').value.trim();
-        const to = row.querySelector('.to').value.trim();
-
-        if (checks.length === 0) return;
-
-        checks.forEach(cb => {
-          const val = cb.value;
-          if (val === "在營") {
-            presentList.push(name);
-          } else if (val === "休假" || val === "受訓" || val === "公勤") {
-            let extra = "";
-            if (val === "公勤" && place) extra += `（${place}`;
-            if (from && to) extra += `${place ? " " : "（"}${from}-${to}）`;
-            else if (place && !from && !to) extra += "）";
-            else if (!place && from && to) extra += `（${from}-${to}）`;
-            leaveList[val].push(`${name}${extra}`);
-          }
-        });
-      });
-
-      const totalPresent = presentList.length;
-      const totalLeave = shouldAttend - totalPresent;
-
-      let report = `專案作業${dateText}出勤統計：\n`;
-      report += `應到${shouldAttend}、事故${totalLeave}、實到${totalPresent}\n`;
-      report += `在營(${totalPresent})：${presentList.join("、")}\n\n`;
-
-      report += `事故(${totalLeave})：\n`;
-      let idx = 1;
-      for (let type of ["休假", "受訓", "公勤"]) {
-        if (leaveList[type].length > 0) {
-          report += `${idx}.${type}：${leaveList[type].join("、")}\n`;
-          idx++;
-        }
-      }
-
-      document.getElementById("result").textContent = report;
-    }
-
-    function copyResult() {
-      const result = document.getElementById("result").textContent;
-      if (!result.trim()) {
-        alert("請先產生出勤統計再複製！");
-        return;
-      }
-      navigator.clipboard.writeText(result).then(() => {
-        alert("已複製到剪貼簿！");
-      });
+      return `${date.getMonth()+1}月${date.getDate()}日`;
     }
   </script>
 </body>
