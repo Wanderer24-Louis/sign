@@ -1,0 +1,22 @@
+body {
+  font-family: "Microsoft JhengHei", sans-serif;
+  margin: 30px;
+}
+.member {
+  margin-bottom: 8px;
+}
+input[type="text"] {
+  margin-left: 4px;
+  width: 120px;
+}
+#result {
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 12px;
+  white-space: pre-wrap;
+  margin-top: 20px;
+}
+button {
+  margin-right: 8px;
+  padding: 6px 12px;
+}
