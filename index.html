@@ -3,64 +3,170 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>點名系統</title>
+  <title>出勤統計系統</title>
   <style>
-    body { font-family: "Microsoft JhengHei", sans-serif; padding: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background-color: #f5f5f5; }
-    button { padding: 8px 16px; cursor: pointer; }
-    #result { margin-top: 20px; white-space: pre-line; }
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      padding: 20px;
+      background: #f8f8f8;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+    th {
+      background-color: #eee;
+    }
+    input[type="date"], input[type="text"], input[type="number"] {
+      padding: 4px;
+      width: 150px;
+    }
+    .small-input {
+      width: 100px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #4CAF50;
+      color: white;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      white-space: pre-line;
+    }
   </style>
 </head>
 <body>
-  <h2>出勤點名表</h2>
+  <h2>專案作業出勤統計</h2>
+
+  <label>日期：</label>
+  <input type="date" id="datePicker"><br><br>
+
+  <label>應到人數：</label>
+  <input type="number" id="shouldAttend" value="10" min="0"><br><br>
+
   <table>
     <tr>
       <th>姓名</th>
-      <th>公</th>
-      <th>勤</th>
+      <th>在營</th>
       <th>休假</th>
       <th>受訓</th>
+      <th>公勤</th>
+      <th>地點</th>
+      <th>起</th>
+      <th>迄</th>
     </tr>
-    <tr>
-      <td>A</td>
-      <td><input type="checkbox" name="A" value="公"></td>
-      <td><input type="checkbox" name="A" value="勤"></td>
-      <td><input type="checkbox" name="A" value="休假"></td>
-      <td><input type="checkbox" name="A" value="受訓"></td>
-    </tr>
-    <tr>
-      <td>B</td>
-      <td><input type="checkbox" name="B" value="公"></td>
-      <td><input type="checkbox" name="B" value="勤"></td>
-      <td><input type="checkbox" name="B" value="休假"></td>
-      <td><input type="checkbox" name="B" value="受訓"></td>
-    </tr>
-    <tr>
-      <td>C</td>
-      <td><input type="checkbox" name="C" value="公"></td>
-      <td><input type="checkbox" name="C" value="勤"></td>
-      <td><input type="checkbox" name="C" value="休假"></td>
-      <td><input type="checkbox" name="C" value="受訓"></td>
-    </tr>
+
+    <!-- 名單範例，可自行增加 -->
+    <tr><td>A</td><td><input type="checkbox" name="A" value="在營"></td><td><input type="checkbox" name="A" value="休假"></td><td><input type="checkbox" name="A" value="受訓"></td><td><input type="checkbox" name="A" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
+    <tr><td>B</td><td><input type="checkbox" name="B" value="在營"></td><td><input type="checkbox" name="B" value="休假"></td><td><input type="checkbox" name="B" value="受訓"></td><td><input type="checkbox" name="B" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
+    <tr><td>C</td><td><input type="checkbox" name="C" value="在營"></td><td><input type="checkbox" name="C" value="休假"></td><td><input type="checkbox" name="C" value="受訓"></td><td><input type="checkbox" name="C" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
+    <tr><td>D</td><td><input type="checkbox" name="D" value="在營"></td><td><input type="checkbox" name="D" value="休假"></td><td><input type="checkbox" name="D" value="受訓"></td><td><input type="checkbox" name="D" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
+    <tr><td>E</td><td><input type="checkbox" name="E" value="在營"></td><td><input type="checkbox" name="E" value="休假"></td><td><input type="checkbox" name="E" value="受訓"></td><td><input type="checkbox" name="E" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
+    <tr><td>F</td><td><input type="checkbox" name="F" value="在營"></td><td><input type="checkbox" name="F" value="休假"></td><td><input type="checkbox" name="F" value="受訓"></td><td><input type="checkbox" name="F" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
+    <tr><td>G</td><td><input type="checkbox" name="G" value="在營"></td><td><input type="checkbox" name="G" value="休假"></td><td><input type="checkbox" name="G" value="受訓"></td><td><input type="checkbox" name="G" value="公勤"></td><td><input type="text" class="place small-input"></td><td><input type="text" class="from small-input"></td><td><input type="text" class="to small-input"></td></tr>
   </table>
 
-  <button onclick="generateResult()">彙整結果</button>
+  <button onclick="generateReport()">彙整結果</button>
+  <button onclick="copyResult()">📋 一鍵複製</button>
 
   <div id="result"></div>
 
   <script>
-    function generateResult() {
-      const people = ['A', 'B', 'C'];
-      let message = '';
-      people.forEach(person => {
-        const checked = Array.from(document.querySelectorAll(`input[name="${person}"]:checked`))
-                             .map(cb => cb.value)
-                             .join('、');
-        message += `${person}：${checked || '未勾選'}\n`;
+    // 自動帶入今天日期
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      document.getElementById("datePicker").value = `${yyyy}-${mm}-${dd}`;
+    });
+
+    function formatDateForDisplay(dateStr) {
+      if (!dateStr) return "";
+      const date = new Date(dateStr);
+      if (isNaN(date)) return dateStr;
+      return `${date.getMonth() + 1}月${date.getDate()}日`;
+    }
+
+    function generateReport() {
+      const dateStr = document.getElementById("datePicker").value;
+      const dateText = formatDateForDisplay(dateStr) || "（未填日期）";
+      const shouldAttend = parseInt(document.getElementById("shouldAttend").value) || 0;
+
+      const rows = document.querySelectorAll("table tr");
+      let presentList = [];
+      let leaveList = { "休假": [], "受訓": [], "公勤": [] };
+
+      rows.forEach((row, i) => {
+        if (i === 0) return;
+        const name = row.cells[0].textContent.trim();
+        const checks = row.querySelectorAll('input[type="checkbox"]:checked');
+        const place = row.querySelector('.place').value.trim();
+        const from = row.querySelector('.from').value.trim();
+        const to = row.querySelector('.to').value.trim();
+
+        if (checks.length === 0) return;
+
+        checks.forEach(cb => {
+          const val = cb.value;
+          if (val === "在營") {
+            presentList.push(name);
+          } else if (val === "休假" || val === "受訓" || val === "公勤") {
+            let extra = "";
+            if (val === "公勤" && place) extra += `（${place}`;
+            if (from && to) extra += `${place ? " " : "（"}${from}-${to}）`;
+            else if (place && !from && !to) extra += "）";
+            else if (!place && from && to) extra += `（${from}-${to}）`;
+            leaveList[val].push(`${name}${extra}`);
+          }
+        });
       });
-      document.getElementById('result').textContent = message;
+
+      const totalPresent = presentList.length;
+      const totalLeave = shouldAttend - totalPresent;
+
+      let report = `專案作業${dateText}出勤統計：\n`;
+      report += `應到${shouldAttend}、事故${totalLeave}、實到${totalPresent}\n`;
+      report += `在營(${totalPresent})：${presentList.join("、")}\n\n`;
+
+      report += `事故(${totalLeave})：\n`;
+      let idx = 1;
+      for (let type of ["休假", "受訓", "公勤"]) {
+        if (leaveList[type].length > 0) {
+          report += `${idx}.${type}：${leaveList[type].join("、")}\n`;
+          idx++;
+        }
+      }
+
+      document.getElementById("result").textContent = report;
+    }
+
+    function copyResult() {
+      const result = document.getElementById("result").textContent;
+      if (!result.trim()) {
+        alert("請先產生出勤統計再複製！");
+        return;
+      }
+      navigator.clipboard.writeText(result).then(() => {
+        alert("已複製到剪貼簿！");
+      });
     }
   </script>
 </body>
