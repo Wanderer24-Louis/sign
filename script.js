@@ -18,8 +18,10 @@ function renderMemberList() {
     const div = document.createElement('div');
     div.className = 'member';
 
+    // 名字固定在前面，勾選都在後方
     div.innerHTML = `
-      <label><input type="checkbox" class="present" data-name="${name}"> ${name} 在營</label>
+      <span>${name}</span>
+      <label><input type="checkbox" class="present" data-name="${name}"> 在營</label>
       <label><input type="checkbox" class="off" data-name="${name}"> 休假</label>
       <label><input type="checkbox" class="train" data-name="${name}"> 受訓</label>
       <input type="text" class="trainTime" data-name="${name}" placeholder="ex: 7/28-11/14">
@@ -87,4 +89,5 @@ document.getElementById('copyBtn').addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', loadMembers);
+
 
