@@ -1,144 +1,25 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>出勤點名統計</title>
-  <style>
-    body { font-family: "Microsoft JhengHei", sans-serif; padding: 20px; background: #f6f6f6; }
-    table { border-collapse: collapse; width: 100%; background: white; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background-color: #eee; }
-    input[type="time"], input[type="text"] { width: 100px; padding: 2px; }
-    button { margin-top: 15px; padding: 8px 16px; cursor: pointer; }
-    #result { margin-top: 20px; background: #fff; border: 1px solid #ccc; padding: 10px; white-space: pre-line; }
-    .flex { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>出勤統計表</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>出勤點名系統</h2>
+  <h2>專案作業出勤統計</h2>
 
-  <div class="flex">
-    <label>日期：</label>
-    <input type="date" id="datePicker">
-  </div>
+  <label>日期：
+    <input type="date" id="dateInput">
+  </label>
 
-  <div class="flex">
-    <input type="text" id="nameInput" placeholder="輸入名單，用逗號分隔 (例：A,B,C,D)" style="width:300px;">
-    <button onclick="setNames()">建立名單</button>
-  </div>
+  <div id="memberContainer">名單載入中...</div>
 
-  <table id="attendanceTable">
-    <thead>
-      <tr>
-        <th>姓名</th>
-        <th>出勤狀態</th>
-        <th>地點／期間（若有）</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <button id="generateBtn">產生統計結果</button>
+  <button id="copyBtn">一鍵複製</button>
 
-  <button onclick="generateResult()">彙整結果</button>
-  <button onclick="copyResult()">📋 一鍵複製</button>
+  <pre id="result"></pre>
 
-  <div id="result"></div>
-
-  <script>
-    // 初始化
-    window.onload = function() {
-      const savedNames = localStorage.getItem("names");
-      if (savedNames) {
-        document.getElementById("nameInput").value = savedNames;
-        buildTable(savedNames.split(","));
-      }
-      document.getElementById("datePicker").valueAsDate = new Date();
-    };
-
-    // 儲存名單並生成表格
-    function setNames() {
-      const nameStr = document.getElementById("nameInput").value.trim();
-      if (!nameStr) return alert("請輸入名單");
-      localStorage.setItem("names", nameStr);
-      buildTable(nameStr.split(","));
-    }
-
-    // 建立表格
-    function buildTable(names) {
-      const tbody = document.querySelector("#attendanceTable tbody");
-      tbody.innerHTML = "";
-      names.forEach(name => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${name.trim()}</td>
-          <td>
-            <select>
-              <option value="在營">在營</option>
-              <option value="休假">休假</option>
-              <option value="公勤">公勤</option>
-              <option value="受訓">受訓</option>
-            </select>
-          </td>
-          <td><input type="text" placeholder="地點或時間區間"></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // 彙整結果
-    function generateResult() {
-      const date = document.getElementById("datePicker").value;
-      const rows = document.querySelectorAll("#attendanceTable tbody tr");
-      let zaiying = [], xiujia = [], gongqin = [], shouxun = [];
-
-      rows.forEach(r => {
-        const name = r.children[0].textContent.trim();
-        const status = r.children[1].querySelector("select").value;
-        const note = r.children[2].querySelector("input").value.trim();
-
-        if (status === "在營") zaiying.push(name);
-        else if (status === "休假") xiujia.push(name);
-        else if (status === "公勤") gongqin.push(name + (note ? `(${note})` : ""));
-        else if (status === "受訓") shouxun.push(name + (note ? `(${note})` : ""));
-      });
-
-      const total = zaiying.length + xiujia.length + gongqin.length + shouxun.length;
-      let result = `專案作業${formatDate(date)}出勤統計：
-應到${total}、事故${xiujia.length + gongqin.length + shouxun.length}、實到${zaiying.length}
-在營(${zaiying.length})：${zaiying.join("、") || "無"}
-
-事故(${xiujia.length + gongqin.length + shouxun.length})：
-`;
-
-      // 🔢 自動遞減編號邏輯
-      let count = 1;
-      if (xiujia.length) {
-        result += `${count++}.休假：${xiujia.join("、")}\n`;
-      }
-      if (shouxun.length) {
-        result += `${count++}.受訓：${shouxun.join("、")}\n`;
-      }
-      if (gongqin.length) {
-        result += `${count++}.公勤：${gongqin.join("、")}\n`;
-      }
-
-      document.getElementById("result").textContent = result.trim();
-    }
-
-    // 一鍵複製
-    function copyResult() {
-      const text = document.getElementById("result").textContent;
-      if (!text) return alert("請先產生結果！");
-      navigator.clipboard.writeText(text);
-      alert("已複製到剪貼簿！");
-    }
-
-    // 日期格式化
-    function formatDate(dateStr) {
-      if (!dateStr) return "";
-      const date = new Date(dateStr);
-      return `${date.getMonth()+1}月${date.getDate()}日`;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
