@@ -55,7 +55,7 @@ function generateReport() {
   const absent = off.length + train.length + duty.length;
   const real = present.length;
 
-  let result = `專案作業${date ? new Date(date).getMonth()+1 + "月" + new Date(date).getDate() + "日" : ""}出勤統計：\n`;
+  let result = `專案作業組${date ? new Date(date).getMonth()+1 + "月" + new Date(date).getDate() + "日" : ""}出勤統計：\n`;
   result += `應到${total}、事故${absent}、實到${real}\n`;
 
   if (present.length) {
@@ -87,3 +87,4 @@ document.getElementById('copyBtn').addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', loadMembers);
+
