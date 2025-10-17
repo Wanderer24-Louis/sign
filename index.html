@@ -52,7 +52,6 @@
         document.getElementById("nameInput").value = savedNames;
         buildTable(savedNames.split(","));
       }
-      // 預設日期為今天
       document.getElementById("datePicker").valueAsDate = new Date();
     };
 
@@ -104,17 +103,26 @@
       });
 
       const total = zaiying.length + xiujia.length + gongqin.length + shouxun.length;
-      const result = 
-`專案作業${formatDate(date)}出勤統計：
+      let result = `專案作業${formatDate(date)}出勤統計：
 應到${total}、事故${xiujia.length + gongqin.length + shouxun.length}、實到${zaiying.length}
 在營(${zaiying.length})：${zaiying.join("、") || "無"}
 
 事故(${xiujia.length + gongqin.length + shouxun.length})：
-${xiujia.length ? "1.休假：" + xiujia.join("、") + "\n" : ""}
-${shouxun.length ? "2.受訓：" + shouxun.join("、") + "\n" : ""}
-${gongqin.length ? "3.公勤：" + gongqin.join("、") : ""}`;
+`;
 
-      document.getElementById("result").textContent = result;
+      // 🔢 自動遞減編號邏輯
+      let count = 1;
+      if (xiujia.length) {
+        result += `${count++}.休假：${xiujia.join("、")}\n`;
+      }
+      if (shouxun.length) {
+        result += `${count++}.受訓：${shouxun.join("、")}\n`;
+      }
+      if (gongqin.length) {
+        result += `${count++}.公勤：${gongqin.join("、")}\n`;
+      }
+
+      document.getElementById("result").textContent = result.trim();
     }
 
     // 一鍵複製
@@ -125,7 +133,7 @@ ${gongqin.length ? "3.公勤：" + gongqin.join("、") : ""}`;
       alert("已複製到剪貼簿！");
     }
 
-    // 日期格式
+    // 日期格式化
     function formatDate(dateStr) {
       if (!dateStr) return "";
       const date = new Date(dateStr);
