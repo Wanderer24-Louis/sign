@@ -162,9 +162,12 @@ function clearAll() {
   if (!confirm("確定要清除所有填寫資料嗎？")) return;
   localStorage.removeItem('attendanceData');
   members.forEach(name => {
-    document.querySelector(`input[name="${name}-status"]:checked`)?.checked = false;
+    const checked = document.querySelector(`input[name="${name}-status"]:checked`);
+if (checked) checked.checked = false;
+
     document.querySelector(`.trainTime[data-name="${name}"]`).value = '';
     document.querySelector(`.dutyLoc[data-name="${name}"]`).value = '';
   });
   document.getElementById('result').textContent = '';
 }
+
