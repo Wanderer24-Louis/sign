@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>出勤統計表</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>出勤統計主頁</title>
 </head>
 <body>
-  <h2>出勤統計小幫手</h2>
+  <h2>出勤統計系統</h2>
+  <p>這裡是受保護的頁面，只有輸入正確密碼的人能看到。</p>
 
-  <label>日期：
-    <input type="date" id="dateInput">
-  </label>
+  <button onclick="logout()">登出</button>
 
-  <div id="memberContainer">名單載入中...</div>
+  <script>
+    // 如果沒授權，導回登入頁
+    if (sessionStorage.getItem("authorized") !== "1") {
+      window.location.href = "login.html";
+    }
 
-  <button id="generateBtn">產生統計結果</button>
-  <button id="copyBtn">一鍵複製</button>
-  
-
-  <pre id="result"></pre>
-
-  <script src="script.js"></script>
+    function logout() {
+      sessionStorage.removeItem("authorized");
+      window.location.href = "login.html";
+    }
+  </script>
 </body>
 </html>
