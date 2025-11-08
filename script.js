@@ -10,16 +10,12 @@ let members = [];
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  // UI 綁定
   document.getElementById('logoutBtn').addEventListener('click', logout);
   document.getElementById('generateBtn').addEventListener('click', generateReport);
   document.getElementById('copyBtn').addEventListener('click', copyResult);
   document.getElementById('clearBtn').addEventListener('click', clearAll);
 
-  // 預設今天日期
   document.getElementById('dateInput').valueAsDate = new Date();
-
-  // 載入名單
   loadMembers();
 }
 
@@ -67,13 +63,12 @@ function renderMemberList() {
     container.appendChild(div);
   });
 
-  // 任一輸入變更就存檔
   container.querySelectorAll('input').forEach(input => {
     input.addEventListener('change', saveCurrentData);
   });
 }
 
-// 💾 存資料到 localStorage
+// 💾 存資料
 function saveCurrentData() {
   const data = {};
   members.forEach(name => {
@@ -86,7 +81,7 @@ function saveCurrentData() {
   localStorage.setItem('attendanceData', JSON.stringify(data));
 }
 
-// 📥 載入上次填寫
+// 📥 載入上次資料
 function loadPreviousData() {
   const saved = localStorage.getItem('attendanceData');
   if (!saved) return;
@@ -103,59 +98,6 @@ function loadPreviousData() {
   });
 }
 
-// 🧮 產生報告（日期必填 & 每人需單選）
+// 🧮 產生報告
 function generateReport() {
-  const date = document.getElementById('dateInput').value;
-  if (!date) return alert("請先填寫日期！");
-
-  const present = [], off = [], train = [], duty = [];
-
-  for (const name of members) {
-    const selected = document.querySelector(`input[name="${name}-status"]:checked`);
-    if (!selected) return alert(`請為 ${name} 選擇狀態！`);
-    const status = selected.value;
-    const trainTime = document.querySelector(`.trainTime[data-name="${name}"]`).value.trim();
-    const dutyLoc = document.querySelector(`.dutyLoc[data-name="${name}"]`).value.trim();
-
-    if (status === "在營") present.push(name);
-    else if (status === "休假") off.push(name);
-    else if (status === "受訓") train.push({ name, time: trainTime });
-    else if (status === "公勤") duty.push({ name, loc: dutyLoc });
-  }
-
-  const total = members.length;
-  const absent = off.length + train.length + duty.length;
-  const real = present.length;
-
-  let result = `專案作業組${new Date(date).getMonth()+1}月${new Date(date).getDate()}日出勤統計：\n`;
-  result += `應到${total}、事故${absent}、實到${real}\n`;
-  if (present.length) result += `在營(${present.length})：${present.join("、")}\n\n`;
-
-  result += `事故(${absent})：\n`;
-  let count = 1;
-  if (off.length)  result += `${count++}.休假：${off.join("、")}\n`;
-  if (train.length) result += `${count++}.受訓：${train.map(t => `${t.name}${t.time ? `(${t.time})` : ""}`).join("、")}\n`;
-  if (duty.length)  result += `${count++}.公勤：${duty.map(d => `${d.name}${d.loc ? `(${d.loc})` : ""}`).join("、")}\n`;
-
-  document.getElementById('result').textContent = result.trim();
-}
-
-// 📋 一鍵複製
-function copyResult() {
-  const text = document.getElementById('result').textContent;
-  if (!text) return alert("請先產生結果！");
-  navigator.clipboard.writeText(text);
-  alert("✅ 已複製到剪貼簿！");
-}
-
-// 🧹 清除所有填寫
-function clearAll() {
-  if (!confirm("確定要清除所有填寫資料嗎？")) return;
-  localStorage.removeItem('attendanceData');
-  members.forEach(name => {
-    document.querySelector(`input[name="${name}-status"]:checked`)?.checked = false;
-    document.querySelector(`.trainTime[data-name="${name}"]`).value = '';
-    document.querySelector(`.dutyLoc[data-name="${name}"]`).value = '';
-  });
-  document.getElementById('result').textContent = '';
-}
+  const date = document
