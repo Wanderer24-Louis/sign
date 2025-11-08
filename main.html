@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>出勤統計主頁</title>
+  <title>出勤統計小幫手V3.0</title>
 </head>
 <body>
   <h2>出勤統計系統</h2>
@@ -14,13 +14,14 @@
   <script>
     // 如果沒授權，導回登入頁
     if (sessionStorage.getItem("authorized") !== "1") {
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     }
 
     function logout() {
       sessionStorage.removeItem("authorized");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     }
   </script>
 </body>
 </html>
+
