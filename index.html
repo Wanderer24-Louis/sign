@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登入驗證</title>
+  <style>
+    body {
+      background: #f3f4f6;
+      font-family: "Microsoft JhengHei", sans-serif;
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; margin: 0;
+    }
+    #card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      width: 300px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background: #43a047; }
+    #msg { color: #d32f2f; margin-top: 10px; min-height: 20px; }
+  </style>
+</head>
+<body>
+  <div id="card">
+    <h3>請輸入存取密碼</h3>
+    <input type="password" id="pwd" placeholder="Password" autocomplete="current-password">
+    <button id="unlockBtn">登入</button>
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    // 設定密碼的 SHA-256 雜湊
+    const PASSWORD_HASH = "fb351106dcf8005ace790cd95144020e255af13443c5298fb585c9696cce173e"; // 密碼：1234
+
+    async function sha256Hex(text) {
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    }
+
+    async function tryUnlock() {
+      const pwd = document.getElementById('pwd').value.trim();
+      const msg = document.getElementById('msg');
+      if (!pwd) { msg.textContent = "請輸入密碼"; return; }
+
+      const hash = await sha256Hex(pwd);
+      if (hash === PASSWORD_HASH) {
+        // 登入成功：存入 sessionStorage
+        sessionStorage.setItem("authorized", "1");
+        window.location.href = "main.html"; // 跳轉到主頁
+      } else {
+        msg.textContent = "密碼錯誤，請再試一次。";
+      }
+    }
+
+    document.getElementById('unlockBtn').addEventListener('click', tryUnlock);
+    document.getElementById('pwd').addEventListener('keydown', e => {
+      if (e.key === "Enter") tryUnlock();
+    });
+  </script>
+</body>
+</html>
