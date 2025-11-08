@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>登入驗證</title>
+  <title>出勤作業統計登入驗證</title>
   <style>
     body {
       background: #f3f4f6;
@@ -38,11 +38,12 @@
     }
     button:hover { background: #43a047; }
     #msg { color: #d32f2f; margin-top: 10px; min-height: 20px; }
+    #msg { white-space: pre-line; }
   </style>
 </head>
 <body>
   <div id="card">
-    <h3>請輸入存取密碼</h3>
+    <h3>符合資安政策，請輸入存取密碼</h3>
     <input type="password" id="pwd" placeholder="Password" autocomplete="current-password">
     <button id="unlockBtn">登入</button>
     <div id="msg"></div>
@@ -69,7 +70,7 @@
         sessionStorage.setItem("authorized", "1");
         window.location.href = "main.html"; // 跳轉到主頁
       } else {
-        msg.textContent = "密碼錯誤，請再試一次。";
+        msg.textContent = "密碼錯誤，請再試一次。\n如有需要，可詢問網頁維護人";
       }
     }
 
