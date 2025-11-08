@@ -5,23 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>出勤統計表</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* 密碼覆蓋層 */
+    #lockscreen {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    #lockcard {
+      background: #fff; padding: 20px; border-radius: 10px;
+      width: 320px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    #lockcard input {
+      width: 100%; padding: 10px; margin-top: 10px;
+      border: 1px solid #ccc; border-radius: 6px;
+    }
+    #lockcard button {
+      margin-top: 12px; width: 100%;
+      padding: 10px; border: none; border-radius: 6px;
+      background: #4CAF50; color: #fff; cursor: pointer;
+    }
+    #lockmsg { color: #d32f2f; margin-top: 8px; min-height: 20px; }
+  </style>
 </head>
 <body>
-  <h2>出勤統計小幫手</h2>
+  <!-- 🔐 密碼覆蓋層 -->
+  <div id="lockscreen">
+    <div id="lockcard">
+      <h3>請輸入存取密碼</h3>
+      <input type="password" id="pwd" placeholder="Password" autocomplete="current-password">
+      <button id="unlockBtn">進入</button>
+      <div id="lockmsg"></div>
+    </div>
+  </div>
 
-  <label>日期：
-    <input type="date" id="dateInput">
-  </label>
+  <!-- ✅ 真正的應用內容（預設隱藏，驗證通過才顯示） -->
+  <div id="app" style="display:none;">
+    <h2>專案出勤統計</h2>
 
-  <div id="memberContainer">名單載入中...</div>
+    <label>日期：
+      <input type="date" id="dateInput">
+    </label>
 
-  <button id="generateBtn">產生統計結果</button>
-  <button id="copyBtn">一鍵複製</button>
-  
+    <div id="memberContainer">名單載入中...</div>
 
-  <pre id="result"></pre>
+    <button id="generateBtn">產生統計結果</button>
+    <button id="copyBtn">一鍵複製</button>
+    <button id="clearBtn">清除所有填寫資料</button>
+
+    <pre id="result"></pre>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
