@@ -4,24 +4,107 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>出勤統計小幫手V3.0</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>出勤統計系統</h2>
-  <p>這裡是受保護的頁面，只有輸入正確密碼的人能看到。</p>
+  <h2>專案作業出勤統計</h2>
+  <p>（已登入）</p>
 
-  <button onclick="logout()">登出</button>
+  <label>日期：
+    <input type="date" id="dateInput">
+  </label>
+
+  <div id="memberContainer">名單載入中...</div>
+
+  <button id="generateBtn">產生統計結果</button>
+  <button id="copyBtn">一鍵複製</button>
+  <button id="clearBtn">清除所有填寫資料</button>
+  <button id="logoutBtn" style="background:#e74c3c;color:#fff;border:none;border-radius:5px;padding:8px 14px;cursor:pointer;">登出</button>
+
+  <pre id="result"></pre>
 
   <script>
-    // 如果沒授權，導回登入頁
+    // ✅ 若未登入，導回登入頁
     if (sessionStorage.getItem("authorized") !== "1") {
       window.location.href = "index.html";
     }
 
-    function logout() {
-      sessionStorage.removeItem("authorized");
+    // ✅ 登出功能
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('authorized');
       window.location.href = "index.html";
-    }
-  </script>
-</body>
-</html>
+    });
 
+    // ✅ 出勤系統主邏輯
+    let members = [];
+
+    async function loadMembers() {
+      try {
+        const res = await fetch('./list.json');
+        const data = await res.json();
+        members = data.members;
+        renderMemberList();
+        loadPreviousData();
+      } catch (e) {
+        document.getElementById('memberContainer').textContent = '❌ 名單載入失敗';
+      }
+    }
+
+    function renderMemberList() {
+      const container = document.getElementById('memberContainer');
+      container.innerHTML = '';
+      members.forEach(name => {
+        const div = document.createElement('div');
+        div.className = 'member';
+        div.innerHTML = `
+          <span>${name}</span>
+          <label><input type="radio" name="${name}-status" class="status" data-name="${name}" value="在營"> 在營</label>
+          <label><input type="radio" name="${name}-status" class="status" data-name="${name}" value="休假"> 休假</label>
+          <label><input type="radio" name="${name}-status" class="status" data-name="${name}" value="受訓"> 受訓</label>
+          <input type="text" class="trainTime" data-name="${name}" placeholder="ex: 7/28-11/14">
+          <label><input type="radio" name="${name}-status" class="status" data-name="${name}" value="公勤"> 公勤</label>
+          <input type="text" class="dutyLoc" data-name="${name}" placeholder="ex: 台北10/1-10/10">
+        `;
+        container.appendChild(div);
+      });
+      container.querySelectorAll('input').forEach(input => {
+        input.addEventListener('change', saveCurrentData);
+      });
+    }
+
+    function saveCurrentData() {
+      const data = {};
+      members.forEach(name => {
+        const selected = document.querySelector(`input[name="${name}-status"]:checked`);
+        const status = selected ? selected.value : "";
+        const trainTime = document.querySelector(`.trainTime[data-name="${name}"]`).value;
+        const dutyLoc = document.querySelector(`.dutyLoc[data-name="${name}"]`).value;
+        data[name] = { status, trainTime, dutyLoc };
+      });
+      localStorage.setItem('attendanceData', JSON.stringify(data));
+    }
+
+    function loadPreviousData() {
+      const saved = localStorage.getItem('attendanceData');
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      members.forEach(name => {
+        const info = data[name];
+        if (!info) return;
+        if (info.status) {
+          const radio = document.querySelector(`input[name="${name}-status"][value="${info.status}"]`);
+          if (radio) radio.checked = true;
+        }
+        document.querySelector(`.trainTime[data-name="${name}"]`).value = info.trainTime || '';
+        document.querySelector(`.dutyLoc[data-name="${name}"]`).value = info.dutyLoc || '';
+      });
+    }
+
+    function generateReport() {
+      const date = document.getElementById('dateInput').value;
+      if (!date) return alert("請先填寫日期！");
+
+      const present = [], off = [], train = [], duty = [];
+
+      for (const name of members) {
+        const selected
