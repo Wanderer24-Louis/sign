@@ -1,3 +1,15 @@
+// IP查詢
+fetch("https://api.ipify.org?format=json")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("ipInfo").textContent = "目前 IP：" + data.ip;
+  })
+  .catch(() => {
+    document.getElementById("ipInfo").textContent = "無法取得 IP";
+  });
+
+
+
 // 🔐 未登入就導回
 if (sessionStorage.getItem("authorized") !== "1") {
   window.location.href = "index.html";
@@ -170,4 +182,5 @@ if (checked) checked.checked = false;
   });
   document.getElementById('result').textContent = '';
 }
+
 
